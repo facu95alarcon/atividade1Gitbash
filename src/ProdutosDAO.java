@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ProdutosDAO {
@@ -22,10 +23,11 @@ public class ProdutosDAO {
     PreparedStatement prep;
     ResultSet resultset;
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
+     boolean verifier;
     
     public void cadastrarProduto (ProdutosDTO produto){
         
-    boolean verifier = true;    
+       
     try{
             conectaDAO conexao = new conectaDAO();
             conexao.conectar();
@@ -49,9 +51,31 @@ public class ProdutosDAO {
     }
     
     public ArrayList<ProdutosDTO> listarProdutos(){
-        
-        return listagem;
+        ArrayList<ProdutosDTO> lista = new ArrayList<ProdutosDTO>();
+         try{
+            conectaDAO conexao = new conectaDAO();
+            conexao.conectar();
+            String sql = "SELECT * FROM produtos";
+            PreparedStatement consulta = conexao.getConexao().prepareStatement(sql);
+            ResultSet resposta = consulta.executeQuery();
+            
+            while(resposta.next()){
+                ProdutosDTO p = new ProdutosDTO();
+                p.setId(resposta.getInt("id"));
+                p.setNome(resposta.getString("nome"));
+                p.setValor(resposta.getInt("valor"));
+                p.setStatus(resposta.getNString("status"));
+               
+                lista.add(p);
+            }
+            conexao.desconectar();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null,"Erro ao listar os PRODUTOS do Banco de Dados, por favor, tente novamente. ");
+        }
+        return lista;
     }
+     
+    
     
     
     
