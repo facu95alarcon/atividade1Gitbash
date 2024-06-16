@@ -3,6 +3,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 
 public class cadastroVIEW extends javax.swing.JFrame {
@@ -134,15 +135,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
 
        
-            conectaDAO conexao = new conectaDAO();
-            conexao.conectar();
-            String sql ="";
-            sql = "INSERT INTO produtos(id,nome,valor,status) VALUES (?,?,?,?);";
-        try {
-            PreparedStatement query = conexao.getConexao().prepareStatement(sql);
-        } catch (SQLException ex) {
-            Logger.getLogger(cadastroVIEW.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            
         ProdutosDTO produto = new ProdutosDTO();
         String nome = cadastroNome.getText();
         String valor = cadastroValor.getText();
@@ -153,7 +146,11 @@ public class cadastroVIEW extends javax.swing.JFrame {
         
         ProdutosDAO produtodao = new ProdutosDAO();
         produtodao.cadastrarProduto(produto);
-        
+        if(produtodao.verifier){
+           JOptionPane.showMessageDialog(null,"Produto cadastrado com sucesso!.");
+        }else{
+            JOptionPane.showMessageDialog(null,"Erro ao cadastrar produto!.");
+        }
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
