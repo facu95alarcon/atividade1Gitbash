@@ -66,13 +66,37 @@ public class ProdutosDAO {
         }
         return lista;
     }
-     
+    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+        ArrayList<ProdutosDTO> lista = new ArrayList<ProdutosDTO>();
+        try{
+            conectaDAO conexao = new conectaDAO();
+            conexao.conectar();
+            String sql = "SELECT * FROM produtos WHERE status='vendido'";
+            PreparedStatement consulta = conexao.getConexao().prepareStatement(sql);
+            ResultSet resposta = consulta.executeQuery();
+            
+            while(resposta.next()){
+                ProdutosDTO p = new ProdutosDTO();
+                p.setId(resposta.getInt("id"));
+                p.setNome(resposta.getString("nome"));
+                p.setValor(resposta.getInt("valor"));
+                p.setStatus(resposta.getNString("status"));
+               
+                lista.add(p);
+            }
+            conexao.desconectar();
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null,"Erro ao listar os FILMES do Banco de Dados, por favor, tente novamente. ");
+        }
+        return lista;
+    }
+            
     public static boolean venderProduto (int id){
          try{
             conectaDAO conexao = new conectaDAO();
             conexao.conectar();
             String sql = "UPDATE produtos SET status='vendido' WHERE id=?";
-            PreparedStatement consulta = conexao.getConexao().prepareStatement(sql);
+           PreparedStatement consulta = conexao.getConexao().prepareStatement(sql);
            consulta.setInt(1, id);
            consulta.execute();
            conexao.desconectar();
