@@ -1,12 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
-/**
- *
- * @author Adm
- */
 
 import java.sql.PreparedStatement;
 import java.sql.Connection;
@@ -75,7 +67,22 @@ public class ProdutosDAO {
         return lista;
     }
      
-    
+    public static boolean venderProduto (int id){
+         try{
+            conectaDAO conexao = new conectaDAO();
+            conexao.conectar();
+            String sql = "UPDATE produtos SET status='vendido' WHERE id=?";
+            PreparedStatement consulta = conexao.getConexao().prepareStatement(sql);
+           consulta.setInt(1, id);
+           consulta.execute();
+           conexao.desconectar();
+           return true;
+    }catch(SQLException s){
+    JOptionPane.showMessageDialog(null, "Erro ao excluir o registro no banco de dados (SQL)");
+    return false;
+    }
+        
+    }
     
     
     
